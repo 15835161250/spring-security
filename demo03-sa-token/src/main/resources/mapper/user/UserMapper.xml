@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zone.security.satoken.mapper.user.UserMapper">
+    <select id="getAll" resultType="zone.security.satoken.domain.SysUser">
+        select *
+        from sys_user
+    </select>
+
+    <select id="checkUserByUsername" resultType="int">
+        select count(*)
+        from sys_user
+        where user_name = #{username}
+    </select>
+
+    <insert id="insertUser" parameterType="zone.security.satoken.body.CreateUserBody"  useGeneratedKeys="true" keyProperty="userId">
+        insert sys_user (user_name, password) VALUE (#{username}, #{password})
+    </insert>
+
+    <update id="updateUser">
+        update sys_user
+            <set>
+                <if test="username !=null and username !=''">
+                    user_name = #{username},
+                </if>
+                <if test="password !=null and password !=''">
+                    password = #{password}
+                </if>
+            </set>
+        where id = #{userId}
+    </update>
+
+    <select id="getUserByUsername" resultType="zone.security.satoken.domain.SysUser">
+        select *
+        from sys_user where user_name = #{username} limit 1;
+    </select>
+
+    <delete id="delByUserId">
+        delete from sys_user where id = #{userId}
+    </delete>
+</mapper>
